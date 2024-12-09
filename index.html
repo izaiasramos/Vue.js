@@ -31,7 +31,7 @@
                         <button v-on:click="addComment" type="submit" class="btn btn-primary">Comentar</button>
                         </div>
                         <div class="list-group">
-                        <div class="list-group-item" v-for="(comment, index) in comments">
+                        <div class="list-group-item" v-for="(comment, index) in allComments">
                             <span class="comment__author">Autor: <strong>{{comment.name}}</strong></span><!-- sintaxe para quando se quer cuspir um valor {{comments.name}} -->
                             <p>{{comment.message}}</p>
                             <div>
@@ -60,7 +60,7 @@
                 // console.log("chamado!");
                 // console.log(this.name);
                 // console.log(this.message);
-                if (this.name.trim() === '' || this.message.trim() === ''){
+                if (this.message.trim() === ''){
                     return;
                 }
                 this.comments.push({
@@ -75,7 +75,20 @@
                 // console.log(index);
                 this.comments.splice(index, 1);
             }
-        } 
+        },
+        computed: {//disponibiliza variáveis/valores para renderizar no template, assim como a propriedade data: {} mas o data é mais voltado para o model e api, já o computed é sobre oque vc quer renderizar na view, com  parte de interface, oque vc quer mostrar de informação
+            allComments(){
+                return this.comments.map(comment => ({
+                    ...comment,
+                    name: (comment.name || '').trim() === '' ? 'Anônimo' : comment.name
+                }));
+            }
+        }, 
+        watch: {
+            comments(val){
+                console.log("val", val)
+            }
+        }
         });
 
     </script>
